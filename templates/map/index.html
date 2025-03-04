@@ -1,0 +1,61 @@
+<!-- templates/map/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Map index{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+{% block main %}
+<h2>ブース検索</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">検索</button>
+</form>
+<!-- 検索候補を表示する領域 -->
+<div id="suggestions">
+    <!-- JavaScriptでリアルタイムに候補が表示されます -->
+</div>
+<!-- 検索結果（目的地案内）があれば表示 -->
+{% if destination %}
+    <div id="destination">
+        {% if destination|length > 1 %}
+            {% for line in destination %}
+                <p>{{ line }}</p>
+            {% endfor %}
+        {% else %}
+            <p>{{ destination }}</p>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+    // booth入力欄（フォームのIDは自動的に "id_booth" になる）に対してキー入力イベントを監視
+    $('#id_booth').on('keyup', function(){
+        var query = $(this).val();
+        if(query.length > 0){
+            $.ajax({
+                url: '{% url "map:booth_suggestions" %}',
+                data: {
+                    'q': query
+                },
+                dataType: 'json',
+                success: function(data){
+                    var suggestions = data.suggestions;
+                    var suggestionsHtml = '<ul>';
+                    for(var i = 0; i < suggestions.length; i++){
+                        suggestionsHtml += '<li>' + suggestions[i] + '</li>';
+                    }
+                    suggestionsHtml += '</ul>';
+                    $('#suggestions').html(suggestionsHtml);
+                }
+            });
+        } else {
+            $('#suggestions').empty();
+        }
+    });
+});
+</script>
+{% endblock %}
