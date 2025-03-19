@@ -3,6 +3,7 @@ from django.views import View
 from . models import QRViewCount, Booth
 from django.http import JsonResponse
 from .forms import NavigationForm
+import datetime
 # Create your views here.
 
 class IndexView(View):
@@ -10,31 +11,40 @@ class IndexView(View):
         context = {'form' : NavigationForm()}
         return render(request, 'map/index.html', context)
     
+
+    
     def post(self, request):
         form = NavigationForm(request.POST)
+        #年度ごとに今年のboothだけを検索するため、current_yearを計算する
+        today = datetime.date.today()
+        current_year = today.year % 100 #例： 2025年なら25
+
         if form.is_valid():
             current_charfloor = form.cleaned_data['floor']
             current_floor = int(current_charfloor)
 
-            booth_name = form.cleaned_data['booth']
-
-            try:
-                booth = Booth.objects.filter(name__icontains=booth_name).first()
-                if not booth:
-                    raise Booth.DoesNotExist
-            except Booth.DoesNotExist:
-                # エラーの場合はセッションにエラーメッセージを保存してResultViewへリダイレクト
+            #今年設定されたboothしか検索できないようにする
+            booth_query = form.cleaned_data['booth']
+            booth_instance = Booth.objects.filter(
+                circle__name__icontains=booth_query,
+                year = current_year
+                ).first()
+                
+            if not booth_instance:
                 request.session['destination_error'] = "指定されたブースが見つかりませんでした"
+            else: 
+                # 正常な場合は必要な情報をセッションに保存
+                request.session['current_floor'] = current_floor 
+                request.session['booth_id'] = booth_instance.id
                 return redirect('map:result')
-            
-            # 正常な場合は必要な情報をセッションに保存
-            request.session['current_floor'] = current_floor
-            request.session['booth_id'] = booth.id
-            return redirect('map:result')
         return render(request, 'map/index.html', {'form': form})
+
 
 class ResultView(View):
     def get(self, request, **kwargs):
+
+        destination = None
+
         form = NavigationForm()
 
         if 'destination_error' in request.session:
@@ -74,32 +84,52 @@ class ResultView(View):
         destination = instructions
         return render(request, 'map/result.html',{'form':form, 'destination':destination})
     
+    
+    
     def post (self, request):
-        
         form = NavigationForm(request.POST)
+        #年度ごとに今年のboothだけを検索するため、current_yearを計算する
+        today = datetime.date.today()
+        current_year = today.year % 100 #例： 2025年なら25
+
         if form.is_valid():
-            #floorのformはshoicefieldでcharで返されるため、intに変更する
             current_charfloor = form.cleaned_data['floor']
             current_floor = int(current_charfloor)
 
-            booth_name = form.cleaned_data['booth']
-
-            #boothは現在はあいまい検索でboothを決定している
-            #TODO:今後はjsでの選択式を目指す
-            try:
-                booth = Booth.objects.filter(name__icontains=booth_name).first()
-                if not booth:
-                    raise Booth.DoesNotExist
-            except Booth.DoesNotExist:
-                # エラーの場合はセッションにエラーメッセージを保存してResultViewへリダイレクト
+            booth_query = form.cleaned_data['booth']
+            booth_instance = Booth.objects.filter(
+                circle__name__icontains=booth_query,
+                year = current_year
+                ).first()
+                
+            if not booth_instance:
                 request.session['destination_error'] = "指定されたブースが見つかりませんでした"
+            else: 
+                # 正常な場合は必要な情報をセッションに保存
+                request.session['current_floor'] = current_floor 
+                request.session['booth_id'] = booth_instance.id
                 return redirect('map:result')
-            
-            # 正常な場合は必要な情報をセッションに保存
-            request.session['current_floor'] = current_floor
-            request.session['booth_id'] = booth.id
-            return redirect('map:result')
         return render(request, 'map/index.html', {'form': form})
+
+    
+   # AJAXによるオートコンプリートのためのビュー
+def booth_autocomplete(request):
+    form = NavigationForm(request.POST)
+    #年度ごとに今年のboothだけを検索するため、current_yearを計算する
+    today = datetime.date.today()
+    current_year = today.year % 100 #例： 2025年なら25
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        booth_query = request.GET.get('term', '')
+        #boothのinstanceが与えられる
+        booth_js_instance = Booth.objects.filter(
+            circle__name__icontains=booth_query,
+            year=current_year)[:10]
+        # instanceから候補としてブース名のリストを返す
+        results = list(booth_js_instance.values_list('circle__name', flat=True))
+
+        return JsonResponse(results, safe=False)
+    return JsonResponse([], safe=False)
 
 class TestView(View):
     def get (self, request, **kwargs):

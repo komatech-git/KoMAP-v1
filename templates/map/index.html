@@ -12,3 +12,20 @@
 </form>
 {% endblock%}
 
+{% block extra_js %}
+<!-- jQuery と jQuery UI の読み込み -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+
+<script>
+  $(function() {
+    // boothフィールドに対してオートコンプリートを有効化
+    $('#id_booth').autocomplete({
+      source: "{% url 'map:booth-autocomplete' %}",
+      minLength: 1, // 2文字以上入力されたら候補を取得
+    });
+  });
+</script>
+{% endblock %}

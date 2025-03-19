@@ -14,5 +14,3 @@ class NavigationForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields['floor'].choices= [(f.id, f.number) for f in Floor.objects.all()]
-
-    #TODO: formに改良が必要。modelからboothが検索欄に表示されるようにするべき

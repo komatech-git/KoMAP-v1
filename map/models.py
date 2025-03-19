@@ -57,12 +57,12 @@ class Booth(models.Model):
         blank=True,
     )
 
-    years = models.IntegerField(
+    year = models.IntegerField(
         default=0
     )
 
     def __str__(self):
-        return f"{self.name} in {self.room}"
+        return f"{self.circle} in {self.room}"
     
 
 class QRViewCount(models.Model):
