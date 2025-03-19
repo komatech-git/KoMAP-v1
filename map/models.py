@@ -2,6 +2,15 @@ from django.db import models
 
 # Create your models here.
 
+class Circle(models.Model):
+    name = models.CharField(
+        max_length= 50, 
+        default= "N/A"
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
 #階を部屋(教室)に紐づけ、教室をBoothに紐づける。
 #何階かを後の計算に使用するため、Floorはintにする。
 class Floor(models.Model):
@@ -41,8 +50,15 @@ class Booth(models.Model):
         max_length=100,
     )
 
-    unique_id = models.IntegerField(
-        unique=True
+    circle = models.ForeignKey(
+        Circle,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    years = models.IntegerField(
+        default=0
     )
 
     def __str__(self):

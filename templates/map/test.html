@@ -1,0 +1,26 @@
+<!-- templates/map/test.html -->
+{% extends "base.html" %}
+
+{% block title %}Map test{% endblock %}
+
+{% block main %}
+<h2>ブース検索test版</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">検索</button>
+</form>
+<!-- 検索結果（目的地案内）があれば表示 -->
+{% if destination %}
+    <div id="destination">
+        {% if destination|length > 1 %}
+            {% for line in destination %}
+                <p>{{ line }}</p>
+            {% endfor %}
+        {% else %}
+            <p>{{ destination }}</p>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}
+
