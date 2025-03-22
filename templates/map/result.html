@@ -22,7 +22,16 @@
         {% endif %}
     </div>
 {% endif %}
+
+<!-- Room の test_image が存在する場合、その画像を表示 -->
+{% if room_image_url %}
+    <div id="map_picture">
+        <img src="{{ room_image_url }}" alt="部屋の案内図">
+    </div>
+{% endif %}
+
 {% endblock %}
+      
 
 {% block extra_js %}
 <!-- jQuery と jQuery UI の読み込み -->

@@ -82,8 +82,14 @@ class ResultView(View):
             instructions.append(f"目的のブースは{booth.room.name}にあります")
 
         destination = instructions
-        return render(request, 'map/result.html',{'form':form, 'destination':destination})
-    
+
+        room_image_url = booth.room.test_image.url if booth.room.test_image else None
+        
+        return render(request, 'map/result.html',{
+            'form':form,
+            'destination':destination,
+            'room_image_url':room_image_url
+        })
     
     
     def post (self, request):

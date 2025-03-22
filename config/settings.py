@@ -126,6 +126,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = f'/var/www/{BASE_DIR.name}/static'
 
+MEDIA_URL = '/media/'
+#TODO:本番環境ではこうする。MEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
+MEDIA_ROOT = BASE_DIR/ 'media_root'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

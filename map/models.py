@@ -2,10 +2,29 @@ from django.db import models
 
 # Create your models here.
 
+class Category(models.Model):
+    name = models.CharField(
+        max_length= 50,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Circle(models.Model):
     name = models.CharField(
-        max_length= 50, 
-        default= "N/A"
+        max_length= 50,
+        null=True,
+        blank=True 
+    )
+
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -28,10 +47,17 @@ class Room(models.Model):
         null=True,
         blank=True,
     )
-
  
     name = models.CharField(
         max_length=100,default="default"
+    )
+
+    #文字が入っただけのテスト画像を入れておくためのmodel
+    test_image = models.ImageField(
+        verbose_name="テスト画像",
+        upload_to='map/test_images',
+        null=True,
+        blank=True
     )
 
     def __str__(self):
