@@ -1,122 +1,132 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from . models import QRViewCount, Booth
+from django.urls import reverse
 from django.http import JsonResponse
 from .forms import NavigationForm
 import datetime
 # Create your views here.
 
 class IndexView(View):
-    def get (self, request):
-        context = {'form' : NavigationForm()}
-        return render(request, 'map/index.html', context)
-    
+    def get(self, request):
+        form = NavigationForm()
+        # boothをランダムに3件表示する
+        booths = Booth.objects.order_by('?')[:3]
+        
+        booth_info = []
+        for booth in booths:
+            circle_name = booth.circle.name if booth.circle else "未設定"
+            room_name = booth.room.name if booth.room else "未設定"
+            # 結果ページのURLにbooth_idをクエリパラメータとして付与
+            url = reverse('map:result') + f'?booth_id={booth.id}'
+            booth_info.append({
+                "circle_name": circle_name,
+                "room_name": room_name,
+                "url": url,
+            })
 
+        context = {
+            'form': form,
+            'booth_info': booth_info,
+        }
+        return render(request, 'map/index.html', context)
     
     def post(self, request):
         form = NavigationForm(request.POST)
-        #年度ごとに今年のboothだけを検索するため、current_yearを計算する
-        today = datetime.date.today()
-        current_year = today.year % 100 #例： 2025年なら25
-
         if form.is_valid():
             current_charfloor = form.cleaned_data['floor']
             current_floor = int(current_charfloor)
-
-            #今年設定されたboothしか検索できないようにする
             booth_query = form.cleaned_data['booth']
-            booth_instance = Booth.objects.filter(
-                circle__name__icontains=booth_query,
-                year = current_year
-                ).first()
+            booth_instance = Booth.objects.filter(circle__name__icontains=booth_query).first()
                 
             if not booth_instance:
-                request.session['destination_error'] = "指定されたブースが見つかりませんでした"
-            else: 
-                # 正常な場合は必要な情報をセッションに保存
-                request.session['current_floor'] = current_floor 
-                request.session['booth_id'] = booth_instance.id
-                return redirect('map:result')
+                context = {
+                    'form': form,
+                    'destination': "指定されたブースが見つかりませんでした",
+                }
+                return render(request, 'map/index.html', context)
+            else:
+                # URLクエリパラメータとしてbooth_idとcurrent_floorを渡す
+                url = reverse('map:result') + f'?booth_id={booth_instance.id}&current_floor={current_floor}'
+                return redirect(url)
         return render(request, 'map/index.html', {'form': form})
 
 
 class ResultView(View):
     def get(self, request, **kwargs):
-
-        destination = None
-
         form = NavigationForm()
-
-        if 'destination_error' in request.session:
-            destination = request.session.pop('destination_error')
-            return render(request, 'map/index.html', {'form':form, 'destination':destination})
+        # セッションではなくGETパラメータから値を取得
+        booth_id = request.GET.get('booth_id')
+        current_floor = request.GET.get('current_floor')
         
-        current_floor = request.session.get('current_floor')
-        booth_id = request.session.get('booth_id')
-
-        if current_floor is None or booth_id is None:
+        # current_floorが文字列で渡されるので、数値に変換（変換できなければNone）
+        if current_floor is not None:
+            try:
+                current_floor = int(current_floor)
+            except ValueError:
+                current_floor = None
+        
+        if booth_id is None:
             destination = "必要な情報が見つかりませんでした。再度入力してください"
-            return render(request, 'map/index.html', {'form':form, 'destination':destination})
+            return render(request, 'map/index.html', {'form': form, 'destination': destination})
         
         try:
             booth = Booth.objects.get(pk=booth_id)
         except Booth.DoesNotExist:
             destination = "指定されたブースが見つかりませんでした"
-            return render(request, 'map/index.html', {'form':form, 'destination':destination})
+            return render(request, 'map/index.html', {'form': form, 'destination': destination})
         
-        destination_floor = booth.room.floor.number
-        booth_name = booth.circle.name
-
-        instructions = []
-        instructions.append (f"{booth_name}のブースは{destination_floor}階にあります")
-        
-        if current_floor == destination_floor:
-            instructions.append("あなたは既にブースがある階にいます。")
-            instructions.append(f"目的のブースは{booth.room.name}にあります")
-        else: 
-            floor_diff = abs(destination_floor - current_floor)
-            if current_floor < destination_floor:
-                instructions.append(f"あなたは現在{current_floor}階にいます。{floor_diff}階上がる必要があります。")
+        instructions = []  # まず空のリストを初期化
+        if current_floor is not None:
+            destination_floor = booth.room.floor.number
+            booth_name = booth.circle.name
+            instructions.append(f"{booth_name}のブースは{destination_floor}階にあります")
+            
+            if current_floor == destination_floor:
+                instructions.append("あなたは既にブースがある階にいます。")
+                instructions.append(f"目的のブースは{booth.room.name}にあります")
             else:
-                instructions.append(f"あなたは現在{current_floor}階にいます。{floor_diff}階下がる必要があります。")
-            instructions.append(f"目的のブースは{booth.room.name}にあります")
-
-        destination = instructions
-
-        room_image_url = booth.room.test_image.url if booth.room.test_image else None
+                floor_diff = abs(destination_floor - current_floor)
+                if current_floor < destination_floor:
+                    instructions.append(f"あなたは現在{current_floor}階にいます。{floor_diff}階上がる必要があります。")
+                else:
+                    instructions.append(f"あなたは現在{current_floor}階にいます。{floor_diff}階下がる必要があります。")
+                instructions.append(f"目的のブースは{booth.room.name}にあります")
+            destination = instructions
+            room_image_url = booth.room.test_image.url if booth.room.test_image else None
+        else:
+            # booth_idだけが渡された場合の処理（例：画像のみ表示）
+            destination_floor = booth.room.floor.number
+            booth_name = booth.circle.name
+            instructions.append(f"{booth_name}のブースは{destination_floor}階にあります")
+            instructions.append("ブースの位置画像をご確認ください。現在地を入力することで案内を開始できます")
+            destination = instructions
+            room_image_url = booth.room.test_image.url if booth.room.test_image else None
         
-        return render(request, 'map/result.html',{
-            'form':form,
-            'destination':destination,
-            'room_image_url':room_image_url
+        return render(request, 'map/result.html', {
+            'form': form,
+            'destination': destination,
+            'room_image_url': room_image_url,
         })
     
-    
-    def post (self, request):
+    def post(self, request):
         form = NavigationForm(request.POST)
-        #年度ごとに今年のboothだけを検索するため、current_yearを計算する
-        today = datetime.date.today()
-        current_year = today.year % 100 #例： 2025年なら25
-
         if form.is_valid():
             current_charfloor = form.cleaned_data['floor']
             current_floor = int(current_charfloor)
-
             booth_query = form.cleaned_data['booth']
-            booth_instance = Booth.objects.filter(
-                circle__name__icontains=booth_query,
-                year = current_year
-                ).first()
+            booth_instance = Booth.objects.filter(circle__name__icontains=booth_query).first()
                 
             if not booth_instance:
-                request.session['destination_error'] = "指定されたブースが見つかりませんでした"
-            else: 
-                # 正常な場合は必要な情報をセッションに保存
-                request.session['current_floor'] = current_floor 
-                request.session['booth_id'] = booth_instance.id
-                return redirect('map:result')
+                context = {
+                    'form': form,
+                    'destination': "指定されたブースが見つかりませんでした",
+                }
+                return render(request, 'map/index.html', context)
+            else:
+                url = reverse('map:result') + f'?booth_id={booth_instance.id}&current_floor={current_floor}'
+                return redirect(url)
         return render(request, 'map/index.html', {'form': form})
-
     
    # AJAXによるオートコンプリートのためのビュー
 def booth_autocomplete(request):

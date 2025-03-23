@@ -5,6 +5,18 @@
 
 {% block main %}
 <h2>KoMAP</h2>
+{% if booth_info %}
+  <div id="booth-descriptions">
+    {% for booth in booth_info %}
+      <div class = "booth-info">
+        <p>サークル:{{ booth.circle_name }}</p>
+        <p>ブースのある場所: {{ booth.room_name }}</p>
+        <a href = {{booth.url}}>url</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+        
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
