@@ -131,16 +131,12 @@ class ResultView(View):
    # AJAXによるオートコンプリートのためのビュー
 def booth_autocomplete(request):
     form = NavigationForm(request.POST)
-    #年度ごとに今年のboothだけを検索するため、current_yearを計算する
-    today = datetime.date.today()
-    current_year = today.year % 100 #例： 2025年なら25
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         booth_query = request.GET.get('term', '')
         #boothのinstanceが与えられる
         booth_js_instance = Booth.objects.filter(
-            circle__name__icontains=booth_query,
-            year=current_year)[:10]
+            circle__name__icontains=booth_query)[:10]
         # instanceから候補としてブース名のリストを返す
         results = list(booth_js_instance.values_list('circle__name', flat=True))
 

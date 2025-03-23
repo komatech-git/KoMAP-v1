@@ -1,28 +1,33 @@
-<!-- templates/map/index.html -->
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}KoMAP{% endblock %}
 
 {% block main %}
-<h2>KoMAP</h2>
+
 {% if booth_info %}
-  <div id="booth-descriptions">
+  <div class="booth-area">
+    <div class="max-w-xl mx-auto">
+      <h3>サークルのブースを見てみよう！</h3>
+    </div>
     {% for booth in booth_info %}
-      <div class = "booth-info">
+      <div class="booth-info">
         <p>サークル:{{ booth.circle_name }}</p>
         <p>ブースのある場所: {{ booth.room_name }}</p>
-        <a href = {{booth.url}}>url</a>
+        <a href="{{ booth.url }}" class="hidden">url</a>
       </div>
     {% endfor %}
   </div>
 {% endif %}
-        
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">検索</button>
-</form>
-{% endblock%}
+  <!-- 検索フォームカード -->
+  <div class="search-card">
+    <h3>現在階と目的地を入力してくだされば、案内を開始できます！</h3>
+    <form method="post" class="flex flex-col space-y-4">
+      {% csrf_token %}
+      {{ form.as_table }}
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+{% endblock %}
 
 {% block extra_js %}
 <!-- jQuery と jQuery UI の読み込み -->
@@ -37,6 +42,25 @@
     $('#id_booth').autocomplete({
       source: "{% url 'map:booth-autocomplete' %}",
       minLength: 1, // 2文字以上入力されたら候補を取得
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    // カードにマウスが入ったときにクラス追加、離れたら削除
+    $('.booth-info').on('mouseenter', function() {
+      $(this).addClass('hover-glow');
+    }).on('mouseleave', function() {
+      $(this).removeClass('hover-glow');
+    });
+    
+    // カード全体をクリックしたとき、内部の<a>タグのURLに遷移する
+    $('.booth-info').on('click', function() {
+      var url = $(this).find('a').attr('href');
+      if (url) {
+        window.location.href = url;
+      }
     });
   });
 </script>

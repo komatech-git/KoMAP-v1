@@ -72,19 +72,11 @@ class Booth(models.Model):
         blank=True,
     )
 
-    name = models.CharField(
-        max_length=100,
-    )
-
     circle = models.ForeignKey(
         Circle,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-    )
-
-    year = models.IntegerField(
-        default=0
     )
 
     def __str__(self):

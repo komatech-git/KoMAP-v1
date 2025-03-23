@@ -7,6 +7,14 @@ ENV PYTHONUNBUFFERED=1
 # 作業ディレクトリをappに設定
 WORKDIR /app
 
+# Node.js のインストール
+# 以下の手順で Node.js をインストールします
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    node -v && npm -v
+
+
 # pipの最新バージョンにアップグレード
 RUN pip install --upgrade pip
 

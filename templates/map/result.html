@@ -1,37 +1,42 @@
 <!-- templates/map/result.html -->
 {% extends "base.html" %}
 
-{% block title %}Map index{% endblock %}
+{% block title %}Map Results{% endblock %}
 
 {% block main %}
-<h2>result</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">検索</button>
-</form>
-<!-- 検索結果（目的地案内）があれば表示 -->
-{% if destination %}
-    <div id="destination">
-        {% if destination|length > 1 %}
-            {% for line in destination %}
-                <p>{{ line }}</p>
-            {% endfor %}
-        {% else %}
-            <p>{{ destination }}</p>
-        {% endif %}
-    </div>
-{% endif %}
+<div class="container mx-auto px-4 py-6">
+  <h2 class="text-3xl font-semibold mb-6 text-center">Search Results</h2>
+  
+  <!-- 検索フォームカード -->
+  <div class="search-card">
+    <form method="post" class="flex flex-col space-y-4">
+      {% csrf_token %}
+      {{ form.as_table }}
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
 
-<!-- Room の test_image が存在する場合、その画像を表示 -->
-{% if room_image_url %}
-    <div id="map_picture">
-        <img src="{{ room_image_url }}" alt="部屋の案内図">
-    </div>
-{% endif %}
+  <!-- 検索結果の表示カード -->
+  {% if destination %}
+  <div id="destination" class="result-card">
+    {% if destination|length > 1 %}
+      {% for line in destination %}
+        <p class="text-gray-800 mb-2">{{ line }}</p>
+      {% endfor %}
+    {% else %}
+      <p class="text-gray-800">{{ destination }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
 
+  <!-- マップ画像カード -->
+  {% if room_image_url %}
+  <div id="map_picture" class="map-card">
+    <img src="{{ room_image_url }}" alt="Map Overview" class="w-full object-cover">
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
-      
 
 {% block extra_js %}
 <!-- jQuery と jQuery UI の読み込み -->
@@ -39,13 +44,12 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
-
 <script>
   $(function() {
     // boothフィールドに対してオートコンプリートを有効化
     $('#id_booth').autocomplete({
       source: "{% url 'map:booth-autocomplete' %}",
-      minLength: 1, // 2文字以上入力されたら候補を取得
+      minLength: 1,
     });
   });
 </script>

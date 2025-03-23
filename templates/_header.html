@@ -1,0 +1,40 @@
+<header class="header">
+    <!-- 左側：KoMAP -->
+    <div class="header-brand">
+      KoMAP
+    </div>
+    <!-- 右側：ナビゲーション -->
+    <nav>
+      <!-- PC用メニュー -->
+      <ul class="header-nav">
+        <li><a href="#" class="hover:underline">Home</a></li>
+        <li><a href="#" class="hover:underline">About</a></li>
+        <li><a href="#" class="hover:underline">Contact</a></li>
+      </ul>
+      <!-- モバイル用メニュー ボタン -->
+      <button id="menu-button" class="header-nav-mobile-btn">
+        <!-- ハンバーガーアイコン -->
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </nav>
+  </header>
+  
+  <!-- モバイル用メニュー -->
+  <div id="mobile-menu" class="mobile-menu hidden">
+    <ul class="mobile-menu-list">
+      <li><a href="#" class="block hover:underline">Home</a></li>
+      <li><a href="#" class="block hover:underline">About</a></li>
+      <li><a href="#" class="block hover:underline">Contact</a></li>
+    </ul>
+  </div>
+  
+  <script>
+    document.getElementById('menu-button').addEventListener('click', function () {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+  
