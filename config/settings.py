@@ -136,7 +136,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = f'/var/www/{BASE_DIR.name}/static'
 
 MEDIA_URL = '/media/'
-#TODO:本番環境ではこうする。MEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
+#TODO:本番環墁E��はこうする、EEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
 MEDIA_ROOT = BASE_DIR/ 'media_root'
 
 # Default primary key field type

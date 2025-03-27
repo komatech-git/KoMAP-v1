@@ -2,24 +2,22 @@ from django.core.management.base import BaseCommand
 from map.models import Floor, Room
 
 class Command(BaseCommand):
-    help = '1階～9階のFloorと各部屋を作成します。特殊な部屋は辞書で指定します。'
+    help = '1階ａE階�EFloorと吁E��屋を作�Eします。特殊な部屋�E辞書で持E��します、E
 
     def handle(self, *args, **options):
-        # 各階で共通して作成する部屋名
-        upper3_common_rooms = ['吹き抜けエスカレーター', 'ラウンジ']  # 3階以上に必ずある部屋
-        short_elevator = ['ショートエレベーター']  # 1～4階のみ設置
-        long_elevator = ['ロングエレベーター']      # 1～9階に共通で設置
+        # 吁E��で共通して作�Eする部屋名
+        upper3_common_rooms = ['ラウンジ']  # 3階以上に忁E��ある部屁E
 
-        # 各階ごとの特殊部屋（数値部屋とは別）を辞書で定義
+        # 吁E��ごとの特殊部屋（数値部屋とは別�E�を辞書で定義
         special_room_names = {
-            1: ['1-2エスカレーター', '食堂', 'セブンイレブン'],
-            2: ['ステージ前', '2-3エスカレーター', '1-2エスカレーター'],
-            3: ['大階段の横', '3-209の前', '下りエスカレーターの前'],
-            4: ['大階段の横', '下りエスカレーターの前', 'アクティブラーニングスペース', '情報グループ学習室PAO'],
-            # 5～9階で特殊部屋が必要な場合は、ここに追記してください。
+            1: ['食堁E, 'セブンイレブン'],
+            2: ['スチE�Eジ剁E, ],
+            3: ['大階段の横', '3-209の剁E,'アクチE��ブラーニングスペ�Eス', '下りエスカレーター付迁E],
+            4: ['大階段の横', '下りエスカレーター付迁E, 'アクチE��ブラーニングスペ�Eス', '惁E��グループ学習室PAO','惁E��グループ学習室の剁E],
+            # 5�E�E階で特殊部屋が忁E��な場合�E、ここに追記してください、E
         }
 
-        # 数値部屋の数を階ごとに定義（1階は例として数値部屋なし）
+        # 数値部屋�E数を階ごとに定義�E�E階�E例として数値部屋なし！E
         room_count_by_floor = {
             2: 12,
             3: 12,
@@ -32,43 +30,30 @@ class Command(BaseCommand):
         }
 
         for floor_number in range(1, 10):
-            # Floorオブジェクトを作成
+            # Floorオブジェクトを作�E
             floor, floor_created = Floor.objects.get_or_create(number=floor_number)
             if floor_created:
                 self.stdout.write(self.style.SUCCESS(f"Created {floor}"))
 
-            # 数値部屋の作成（例："203", "204", ...）
+            # 数値部屋�E作�E�E�例！E203", "204", ...�E�E
             room_count = room_count_by_floor.get(floor_number, 0)
             for room_number in range(1, room_count + 1):
-                room_name = f"{floor_number}{room_number:02d}"
+                room_name = f"3-{floor_number}{room_number:02d}"
                 room, room_created = Room.objects.get_or_create(floor=floor, name=room_name)
                 if room_created:
                     self.stdout.write(self.style.SUCCESS(f"Created room: {room}"))
 
-            # 3階以上の場合、upper3_common_rooms（吹き抜けエスカレーター、ラウンジ）を作成
+            # 3階以上�E場合、upper3_common_rooms�E�吹き抜けエスカレーター、ラウンジ�E�を作�E
             if floor_number >= 3:
                 for common_room in upper3_common_rooms:
                     room, room_created = Room.objects.get_or_create(floor=floor, name=common_room)
                     if room_created:
                         self.stdout.write(self.style.SUCCESS(f"Created common room: {room}"))
 
-            # 1～4階のみ、ショートエレベーターを作成
-            if floor_number in (1, 2, 3, 4):
-                for se in short_elevator:
-                    room, room_created = Room.objects.get_or_create(floor=floor, name=se)
-                    if room_created:
-                        self.stdout.write(self.style.SUCCESS(f"Created elevator room: {room}"))
-
-            # 全階に対して、ロングエレベーターを作成
-            for le in long_elevator:
-                room, room_created = Room.objects.get_or_create(floor=floor, name=le)
-                if room_created:
-                    self.stdout.write(self.style.SUCCESS(f"Created elevator room: {room}"))
-
-            # 辞書に定義されている特殊部屋の作成
+            # 辞書に定義されてぁE��特殊部屋�E作�E
             if floor_number in special_room_names:
                 for special_name in special_room_names[floor_number]:
-                    # 空文字列はスキップ
+                    # 空斁E���EはスキチE�E
                     if special_name.strip():
                         room, room_created = Room.objects.get_or_create(floor=floor, name=special_name)
                         if room_created:

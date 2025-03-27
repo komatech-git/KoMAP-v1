@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Booth, Room, Floor, QRViewCount, Circle, Category
+from .models import Booth, Room, Floor, QRViewCount, Circle, Category, Connector
 
 # Register your models here.
 
@@ -56,5 +56,6 @@ class BoothAdmin(admin.ModelAdmin):
 admin.site.register(Room)
 admin.site.register(Floor)
 admin.site.register(QRViewCount)
+admin.site.register(Connector)
 
 

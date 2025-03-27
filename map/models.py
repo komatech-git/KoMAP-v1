@@ -30,15 +30,45 @@ class Circle(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-#階を部屋(教室)に紐づけ、教室をBoothに紐づける。
-#何階かを後の計算に使用するため、Floorはintにする。
+
+#階を部屁E教室)に紐づけ、教室をBoothに紐づける、E
+#何階かを後�E計算に使用するため、Floorはintにする、E
 class Floor(models.Model):
     number = models.IntegerField(
         default=0
     )
 
+
     def __str__(self):
         return f"Floor{self.number}"
+
+class Connector(models.Model):
+    floor = models.ForeignKey(
+        Floor,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='connectors'           
+
+    )
+    
+    name = models.CharField(
+        null=True,
+        blank=True   
+    )
+
+    test_image = models.ImageField(
+        verbose_name="チE��ト画僁E,
+        upload_to='map/test_images',
+        null=True,
+        blank=True
+    )
+
+
+    def __str__(self):
+        return f"{self.name}"
+
+    
 
 class Room(models.Model):
     floor = models.ForeignKey(
@@ -52,9 +82,9 @@ class Room(models.Model):
         max_length=100,default="default"
     )
 
-    #文字が入っただけのテスト画像を入れておくためのmodel
+    #斁E��が入っただけ�EチE��ト画像を入れておくためのmodel
     test_image = models.ImageField(
-        verbose_name="テスト画像",
+        verbose_name="チE��ト画僁E,
         upload_to='map/test_images',
         null=True,
         blank=True

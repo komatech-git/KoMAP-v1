@@ -6,11 +6,11 @@ from map.models import Room
 
 def create_test_image(text, width=400, height=300, bg_color=(255, 255, 255), text_color=(0, 0, 0)):
     """
-    指定したテキストを中央に配置した画像を生成します。
+    持E��したテキストを中央に配置した画像を生�Eします、E
     """
     image = Image.new('RGB', (width, height), color=bg_color)
     draw = ImageDraw.Draw(image)
-    # フォントの指定（arial.ttf が使えない場合はデフォルトフォントを使用）
+    # フォント�E持E��！Erial.ttf が使えなぁE��合�EチE��ォルトフォントを使用�E�E
     try:
         font = ImageFont.truetype("arial.ttf", 40)
     except IOError:
@@ -25,7 +25,7 @@ def create_test_image(text, width=400, height=300, bg_color=(255, 255, 255), tex
     return image
 
 class Command(BaseCommand):
-    help = '各 Room の test_image に部屋名が書かれた画像を保存します。'
+    help = '吁ERoom の test_image に部屋名が書かれた画像を保存します、E
 
     def handle(self, *args, **options):
         rooms = Room.objects.all()
@@ -33,14 +33,14 @@ class Command(BaseCommand):
             # 部屋名を画像に描画
             image = create_test_image(room.name)
             
-            # バッファに画像データを保存
+            # バッファに画像データを保孁E
             buffer = io.BytesIO()
             image.save(buffer, format='PNG')
             
-            # ContentFile を利用して Django のファイルとして扱う
+            # ContentFile を利用して Django のファイルとして扱ぁE
             file_name = f"{room.name}.png"
             content = ContentFile(buffer.getvalue(), name=file_name)
             
-            # Room インスタンスの test_image フィールドに保存（upload_to で指定したパスに格納される）
+            # Room インスタンスの test_image フィールドに保存！Epload_to で持E��したパスに格納される�E�E
             room.test_image.save(file_name, content, save=True)
             self.stdout.write(self.style.SUCCESS(f"Saved image for {room}"))

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ======= 共通設定 ======= */
+/* ======= 共通設宁E======= */
 @layer base {
   body {
     @apply bg-gray-100 text-gray-900 font-sans;
@@ -15,27 +15,28 @@
   }
 }
 
-/* ======= コンポーネント ======= */
+/* ======= コンポ�EネンチE======= */
 @layer components {
-  /* 検索フォームカード */
+  /* 検索フォームカーチE*/
   .search-card {
-    @apply bg-white shadow rounded p-6 mb-8 max-w-xl mx-auto;
+    @apply bg-white shadow rounded p-6 mb-8 max-w-3xl mx-auto;
   }
-  /* 結果表示カード */
+  /* 結果表示カーチE*/
   .result-card {
     @apply bg-white shadow rounded p-6 mb-8 max-w-3xl mx-auto;
   }
-  /* マップ画像カード */
+  /* マップ画像カーチE*/
   .map-card {
     @apply bg-white shadow rounded overflow-hidden max-w-3xl mx-auto;
   }
-  /* ブース情報のカード風レイアウト */
+  /* ブ�Eス惁E��のカード風レイアウチE*/
   .booth-area {
     @apply bg-blue-50 px-4 py-8;
   }
   .booth-info {
     @apply bg-white p-4 mb-4 rounded shadow max-w-xl mx-auto ;
   }
+  
   .booth-info p {
     @apply text-gray-700 mb-2;
   }
@@ -55,7 +56,7 @@
   .btn {
     @apply bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded;
   }
-  /* jQuery UI Autocomplete のスタイル上書き */
+  /* jQuery UI Autocomplete のスタイル上書ぁE*/
   .ui-autocomplete {
     @apply bg-white border border-gray-300 rounded shadow-lg z-50;
   }
@@ -64,9 +65,9 @@
   }
 }
 
-/* ======= Header コンポーネント ======= */
+/* ======= Header コンポ�EネンチE======= */
 @layer components {
-    /* ヘッダー全体 */
+    /* ヘッダー全佁E*/
     .header {
       @apply flex items-center justify-between p-4 bg-gray-800 text-white;
     }
@@ -82,18 +83,18 @@
     .header-nav-mobile-btn {
       @apply md:hidden focus:outline-none;
     }
-    /* モバイル用メニュー（初期は非表示） */
+    /* モバイル用メニュー�E��E期�E非表示�E�E*/
     .mobile-menu {
       @apply  bg-gray-800 text-white;
     }
-    /* モバイル用メニュー内リスト */
+    /* モバイル用メニュー冁E��スチE*/
     .mobile-menu-list {
       @apply p-4 space-y-2;
     }
   }
 
   @layer components {
-    /* フッター全体のスタイル */
+    /* フッター全体�Eスタイル */
     .footer {
       @apply bg-gray-200;
     }
