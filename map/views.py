@@ -1,9 +1,11 @@
+import os 
 from django.shortcuts import render, redirect
 from django.views import View
 from . models import QRViewCount, Booth, Floor
 from django.urls import reverse
 from django.http import JsonResponse
 from .forms import NavigationForm
+from django.conf import settings
 import datetime
 from urllib.parse import urlencode
 # Create your views here.
@@ -202,7 +204,7 @@ class ResultView(View):
             if not booth_instance:
                 context = {
                     'form': form,
-                    'destination': "持E��されたブ�Eスが見つかりませんでした",
+                    'destination': "指定されたブースが見つかりませんでした",
                 }
                 return render(request, 'map/index.html', context)
             else:
@@ -225,6 +227,18 @@ def booth_autocomplete(request):
         return JsonResponse(results, safe=False)
     return JsonResponse([], safe=False)
 
-
+class TestView(View):
+    def get(self, request, *args, **kwargs):
+        # SVGファイルのパスを設定
+        svg_file_path = os.path.join(settings.BASE_DIR, 'data', 'floor9_改良版.svg')
+        try:
+            with open(svg_file_path, 'r', encoding='utf-8') as f:
+                svg_content = f.read()
+        except Exception as e:
+            svg_content = f'<p>SVGファイルの読み込みに失敗しました: {e}</p>'
         
-
+        # テンプレートにsvgの内容をコンテキストとして渡す
+        context = {
+            'svg_content': svg_content,
+        }
+        return render(request, 'map/test.html', context)
