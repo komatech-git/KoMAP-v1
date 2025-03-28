@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='room',
             name='test_image',
-            field=models.ImageField(blank=True, null=True, upload_to='map/test_images', verbose_name='チE��ト画僁E),
+            field=models.ImageField(blank=True, null=True, upload_to='map/test_images', verbose_name='テスト画像'),
         ),
     ]

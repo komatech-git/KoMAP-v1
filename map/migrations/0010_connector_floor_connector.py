@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(blank=True, null=True)),
-                ('test_image', models.ImageField(blank=True, null=True, upload_to='map/test_images', verbose_name='チE��ト画僁E)),
+                ('test_image', models.ImageField(blank=True, null=True, upload_to='map/test_images', verbose_name='テスト画像')),
             ],
         ),
         migrations.AddField(

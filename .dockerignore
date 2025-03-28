@@ -1,8 +1,26 @@
-node_modules
-.git
-tmp
-log
-.DS_Store
+# 開発キャッシュ系
+__pycache__/
+*.pyc
+*.pyo
+
+# Node & Pythonパッケージ
+node_modules/
 *.tar
 *.zip
 *.log
+
+# OS/IDE固有ファイル
+.DS_Store
+
+# バージョン管理無視
+.git/
+.git
+
+# 環境ファイル
+.env
+
+# 一時/ログ
+tmp/
+log/
+
+

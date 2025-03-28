@@ -32,7 +32,7 @@ class Circle(models.Model):
 
 
 #階を部屁E教室)に紐づけ、教室をBoothに紐づける、E
-#何階かを後�E計算に使用するため、Floorはintにする、E
+#何階かを後�E計算に使用するため、Floorはintにする、E
 class Floor(models.Model):
     number = models.IntegerField(
         default=0
@@ -58,7 +58,7 @@ class Connector(models.Model):
     )
 
     test_image = models.ImageField(
-        verbose_name="チE��ト画僁E,
+        verbose_name="チャット画像",
         upload_to='map/test_images',
         null=True,
         blank=True
@@ -82,9 +82,9 @@ class Room(models.Model):
         max_length=100,default="default"
     )
 
-    #斁E��が入っただけ�EチE��ト画像を入れておくためのmodel
+    #斁E��が入っただけ�EチE��ト画像を入れておくためのmodel
     test_image = models.ImageField(
-        verbose_name="チE��ト画僁E,
+        verbose_name="チャット画像",
         upload_to='map/test_images',
         null=True,
         blank=True

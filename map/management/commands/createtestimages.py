@@ -6,11 +6,11 @@ from map.models import Room
 
 def create_test_image(text, width=400, height=300, bg_color=(255, 255, 255), text_color=(0, 0, 0)):
     """
-    持E��したテキストを中央に配置した画像を生�Eします、E
+    部屋の名前を中央に配置した画像を生成します
     """
     image = Image.new('RGB', (width, height), color=bg_color)
     draw = ImageDraw.Draw(image)
-    # フォント�E持E��！Erial.ttf が使えなぁE��合�EチE��ォルトフォントを使用�E�E
+    # フォント�E持E��！Erial.ttf が使えなぁE��合�EチE��ォルトフォントを使用�E�E
     try:
         font = ImageFont.truetype("arial.ttf", 40)
     except IOError:
@@ -25,7 +25,7 @@ def create_test_image(text, width=400, height=300, bg_color=(255, 255, 255), tex
     return image
 
 class Command(BaseCommand):
-    help = '吁ERoom の test_image に部屋名が書かれた画像を保存します、E
+    help = 'Room の test_image に部屋名が書かれた画像を保存します'
 
     def handle(self, *args, **options):
         rooms = Room.objects.all()
@@ -41,6 +41,6 @@ class Command(BaseCommand):
             file_name = f"{room.name}.png"
             content = ContentFile(buffer.getvalue(), name=file_name)
             
-            # Room インスタンスの test_image フィールドに保存！Epload_to で持E��したパスに格納される�E�E
+            # Room インスタンスの test_image フィールドに保存！Epload_to で持E��したパスに格納される�E�E
             room.test_image.save(file_name, content, save=True)
             self.stdout.write(self.style.SUCCESS(f"Saved image for {room}"))
