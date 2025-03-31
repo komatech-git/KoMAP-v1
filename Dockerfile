@@ -1,26 +1,34 @@
-# ベースイメージの設定
-FROM python:3.12
+ARG PYTHON_VERSION=3.13-slim
 
-# Pythonの標準出力のバッファリングを解除して、出力を即座に表示できるよう設定
-ENV PYTHONUNBUFFERED=1
+FROM python:${PYTHON_VERSION}
 
-# 作業ディレクトリをappに設定
-WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Node.js のインストール
-# 以下の手順で Node.js をインストールします
-RUN apt-get update && apt-get install -y curl gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    node -v && npm -v
+# install psycopg2 dependencies.
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /code
+
+WORKDIR /code
+
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
+
+# 1. collectstatic で出力
+RUN python manage.py collectstatic --noinput
+
+# 2. Fly.io 用に /code/static にコピー
+RUN mkdir -p /code/static && cp -r var/www/code/static/* /code/static/
 
 
-# pipの最新バージョンにアップグレード
-RUN pip install --upgrade pip
+EXPOSE 8000
 
-# 依存関係のインストール
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-# ソースコードをコンテナ内にコピー
-COPY . /app/
+CMD ["gunicorn","--bind",":8000","--workers","2","config.wsgi"]

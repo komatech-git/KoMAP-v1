@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
@@ -24,9 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['komap.fly.dev']
+# settings.py
+CSRF_TRUSTED_ORIGINS = ['https://komap.fly.dev']
+
 
 
 # Application definition
@@ -86,14 +90,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": "db",
-        "PORT": "5432",
-    }
+    "default": dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -133,11 +130,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = f'/var/www/{BASE_DIR.name}/static'
+STATIC_ROOT = f'var/www/{BASE_DIR.name}/static'
 
-MEDIA_URL = '/media/'
-#TODO:本番環墁E��はこうする、EEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
-MEDIA_ROOT = BASE_DIR/ 'media_root'
+MEDIA_URL = '/code/media/'
+#TODO:本番環墁E��はこうする、EEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
+MEDIA_ROOT = f'var/www/{BASE_DIR.name}/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
