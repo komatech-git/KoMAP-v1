@@ -38,6 +38,8 @@ class Floor(models.Model):
         default=0
     )
 
+    svg_text = models.TextField()
+
 
     def __str__(self):
         return f"Floor{self.number}"
