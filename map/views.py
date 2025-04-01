@@ -125,7 +125,7 @@ class ResultView(View):
         
         instructions['room_guide'].append(f"目的のブースは{booth_room}にあります")
         room_image_url = booth.room.test_image.url if booth.room.test_image else None
-        room_svg = booth.floor.svg_text if booth.floor.svg_text else None
+        #room_svg = booth.floor.svg_text if booth.floor.svg_text else None
 
 
 
