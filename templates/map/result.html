@@ -2,6 +2,17 @@
 {% extends "base.html" %}
 
 {% block title %}Map Results{% endblock %}
+{# --css-- #}
+{% block extra_css %}
+<style>
+  #map_svg svg {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+{% endblock %}
 
 {% block main %}
 <div class="container mx-auto px-4 py-6">
@@ -55,26 +66,47 @@
       {% if room_image_url %}
       <div id="map_picture" class="result-card">
         <img src="{{ room_image_url }}" alt="Map Overview" class="w-full object-cover">
+        {% if floor_svg %}
+        <P>floor_svgはtemplateに送られてるze</P>
+          {{ floor_svg|safe }}
+        {% endif %}  
       </div>
       {% endif %}
   </div>
   {% endif %}
-  {% endblock %} 
+  {% if floor_svg %}
+    <div id="map_svg_card" class="result-card">
+      <div id="map_svg" class="w-full max-w-lg mx-auto">
+      {{ floor_svg|safe }}
+      </div>
+    </div>
+  {% endif %}
+  {% endblock %}  
+
+  {% block extra_js %}
+  <!-- jQuery と jQuery UI の読み込み -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
   
 
-{% block extra_js %}
-<!-- jQuery と jQuery UI の読み込み -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
-<script>
-  $(function() {
-    // boothフィールドに対してオートコンプリートを有効匁E
-    $('#id_booth').autocomplete({
-      source: "{% url 'map:booth-autocomplete' %}",
-      minLength: 1,
+  <script>
+    $(function() {
+      // boothフィールドのオートコンプリート
+      $('#id_booth').autocomplete({
+        source: "{% url 'map:booth-autocomplete' %}",
+        minLength: 1,
+      });
+      
+      // viewから渡されたbooth_nameをJavaScript変数に渡す
+      var boothName = "{{ booth_name|escapejs }}";
+      if (boothName) {
+        // floor_svgが含まれる#map_picture内のsvg要素から、該当の要素を探す
+        var boothElement = $('#map_picture svg').find('#' + boothName);
+        if (boothElement.length) {
+          boothElement.addClass('highlight');
+        }
+      }
     });
-  });
-</script>
-{% endblock %}
+  </script>
+  {% endblock %}

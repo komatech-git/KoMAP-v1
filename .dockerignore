@@ -5,6 +5,7 @@ __pycache__/
 
 # Node & Pythonパッケージ
 node_modules/
+theme/static_src/node_modules/
 *.tar
 *.zip
 *.log

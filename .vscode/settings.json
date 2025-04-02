@@ -1,4 +1,7 @@
 // .vscode/settings.json
 {
-    "files.eol": "\n"
+    "files.eol": "\n",
+  "workbench.editorAssociations": {
+    "*.svg":"default"
   }
+}

@@ -108,52 +108,33 @@ class ResultView(View):
             instructions['intro'].append(f"{booth_name}のブースは{destination_floor}階にあります")
             instructions['intro'].append("ブースの位置画像をご確認ください。現在地を入力することで案内を開始できます")
         
-        short_elevator_url = None
-        long_elevator_url  =None
+
         if current_floor is not None :
             floor_diff = abs(destination_floor - current_floor)
                 #同じ階にぁE��場合�E画僁E               
             if current_floor == destination_floor:
                 instructions['floor_move'].append("あなたはすでに目的の階層にいます")
-                #1階かめE階まで上がる時、低層階�Eエレベ�Eターに誘導すめE
-            elif current_floor == 1 and destination_floor == 4:
+            else: 
                 instructions['floor_move'].append(f"{destination_floor}階まで移動してください")
-                instructions['floor_move'].append(f"低層階にあるエレベーターを推奨します")
-
-                short_elevator_instance = current_floor_instance.connectors.filter(name__icontains= "short").first()
-                if short_elevator_instance and short_elevator_instance.test_image:
-                    instructions['floor_move'].append('test')
-                    short_elevator_url = short_elevator_instance.test_image.url
-                    
-                else:
-                    short_elevator_url = None
-                #4階以上�E上がり�E場合�E、上層階へのエレベ�Eターに誘導すめE
-            elif floor_diff >= 4:
-                instructions['floor_move'].append(f"{destination_floor}階まで移動してください")
-                instructions['floor_move'].append(f"上層階に繋がるエレベーターを推奨します")
-                    
-                long_elevator_instance = current_floor_instance.connectors.filter(name__icontains= "long").first()
-                if long_elevator_instance and long_elevator_instance.test_image:
-                    long_elevator_url = long_elevator_instance.test_image.url
-                else:
-                    long_elevator_url = None
-
-            #残りはエスカレーターなどで上がってもらぁE��エスカレーターなどの場所は自明なので画像も渡さなぁE
-            else:
-                instructions['floor_move'].append(f"エスカレーターなどで{destination_floor}階まで移動してください")
+            
+            if destination_floor < current_floor:
+                instructions['floor_move'].append(f"あなたは{floor_diff}階上がる必要があります")
+            elif destination_floor > current_floor:
+                instructions['floor_move'].append(f"あなたは{floor_diff}階下がる必要があります")
 
         
         instructions['room_guide'].append(f"目的のブースは{booth_room}にあります")
         room_image_url = booth.room.test_image.url if booth.room.test_image else None
+        floor_svg = booth.room.floor.svg_text if booth.room.floor.svg_text else None
 
 
 
         return render(request, 'map/result.html', {
             'form': form,
             'instructions': instructions,
+            'floor_svg':floor_svg,
             'room_image_url':room_image_url,
-            'short_elevator_url':short_elevator_url,
-            'long_elevator_url':long_elevator_url
+            'booth_name':booth_name,
             })
     
             
