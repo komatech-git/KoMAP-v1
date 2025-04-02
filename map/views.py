@@ -134,7 +134,7 @@ class ResultView(View):
             'instructions': instructions,
             'floor_svg':floor_svg,
             'room_image_url':room_image_url,
-            'booth_name':booth_name,
+            'booth_room':booth_room,
             })
     
             

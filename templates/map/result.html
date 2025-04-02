@@ -11,6 +11,13 @@
     max-width: 100%;
     height: auto;
   }
+
+  .highlight {
+    stroke: none;       /* 薄い水色の線の色 */
+    stroke-width: 3;       /* 線の太さ */
+    fill: #e1f5fe;         /* 薄い水色の塗りつぶし */
+    transition: all 0.3s ease;
+  }
 </style>
 {% endblock %}
 
@@ -62,26 +69,18 @@
       {% for msg in instructions.room_guide %}
         <p>{{ msg }}</p>
       {% endfor %}
-      
-      {% if room_image_url %}
-      <div id="map_picture" class="result-card">
-        <img src="{{ room_image_url }}" alt="Map Overview" class="w-full object-cover">
-        {% if floor_svg %}
-        <P>floor_svgはtemplateに送られてるze</P>
+
+      {% endif %}
+      {% if floor_svg %}
+        <div id="map_svg_card" class="result-card">
+          <div id="map_svg" class="w-full max-w-lg mx-auto">
           {{ floor_svg|safe }}
-        {% endif %}  
-      </div>
+          </div>
+        </div>
       {% endif %}
   </div>
-  {% endif %}
-  {% if floor_svg %}
-    <div id="map_svg_card" class="result-card">
-      <div id="map_svg" class="w-full max-w-lg mx-auto">
-      {{ floor_svg|safe }}
-      </div>
-    </div>
-  {% endif %}
-  {% endblock %}  
+
+{% endblock %}
 
   {% block extra_js %}
   <!-- jQuery と jQuery UI の読み込み -->
@@ -99,14 +98,15 @@
       });
       
       // viewから渡されたbooth_nameをJavaScript変数に渡す
-      var boothName = "{{ booth_name|escapejs }}";
+      var boothName = "{{ booth_room|escapejs }}";
       if (boothName) {
         // floor_svgが含まれる#map_picture内のsvg要素から、該当の要素を探す
-        var boothElement = $('#map_picture svg').find('#' + boothName);
-        if (boothElement.length) {
-          boothElement.addClass('highlight');
-        }
+        var boothElement = $('#map_svg svg').find('[id="' + boothName + '"]');
+            if (boothElement.length) {
+            boothElement.addClass('highlight');
+            }
       }
+     
     });
   </script>
   {% endblock %}
