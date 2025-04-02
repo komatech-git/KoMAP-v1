@@ -117,9 +117,9 @@ class ResultView(View):
             else: 
                 instructions['floor_move'].append(f"{destination_floor}階まで移動してください")
             
-            if destination_floor < current_floor:
+            if destination_floor > current_floor:
                 instructions['floor_move'].append(f"あなたは{floor_diff}階上がる必要があります")
-            elif destination_floor > current_floor:
+            elif destination_floor < current_floor:
                 instructions['floor_move'].append(f"あなたは{floor_diff}階下がる必要があります")
 
         
