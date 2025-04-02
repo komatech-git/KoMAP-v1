@@ -112,12 +112,3 @@ a {
   @apply text-blue-500 hover:underline;
 }
 
-@layer components {
-  .highlight {
-    /* TailwindCSSのred-500 (#ef4444)とyellow-200 (#fef08a)を使用 */
-    stroke: #ef4444;
-    stroke-width: 3;
-    fill: #fef08a;
-    transition: all 0.3s ease;
-  }
-}
