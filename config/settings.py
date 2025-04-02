@@ -28,18 +28,16 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 DEBUG = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-SESSION_COOKIE_SECURE = False # Fly.ioではhttpsが使える前提で
-CSRF_COOKIE_SECURE = False
-SECURE_SSL_REDIRECT = True    # httpアクセスをhttpsにリダイレクト
+SESSION_COOKIE_SECURE = True # Fly.ioではhttpsが使える前提で
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True   # httpアクセスをhttpsにリダイレクト
 
 ALLOWED_HOSTS = ['komap.fly.dev']
 # settings.py
 CSRF_TRUSTED_ORIGINS = ['https://komap.fly.dev']
 
-LOGIN_URL = '/sakurasakukomatech-secret-admin/login/'
-LOGIN_REDIRECT_URL = '/sakurasakukomatech-secret-admin/'
-
-
+SESSION_ENGINE='django.contrib.sessions.backends.file'
+SESSION_FILE_PATH= BASE_DIR/ 'sessions'
 
 # Application definition
 
@@ -136,7 +134,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = f'var/www/{BASE_DIR.name}/static'
 
