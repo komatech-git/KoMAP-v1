@@ -22,5 +22,11 @@ RUN pip install --upgrade pip
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ソースコードをコンテナ内にコピー
+# npm install の実行
+COPY theme/static_src/package*.json /app/theme/static_src/
+WORKDIR /app/theme/static_src
+RUN npm install
+
+# 作業ディレクトリを元に戻して、コードを最終にコピー
+WORKDIR /app 
 COPY . /app/

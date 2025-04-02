@@ -125,14 +125,16 @@ class ResultView(View):
         
         instructions['room_guide'].append(f"目的のブースは{booth_room}にあります")
         room_image_url = booth.room.test_image.url if booth.room.test_image else None
-        #room_svg = booth.floor.svg_text if booth.floor.svg_text else None
+        floor_svg = booth.room.floor.svg_text if booth.room.floor.svg_text else None
 
 
 
         return render(request, 'map/result.html', {
             'form': form,
             'instructions': instructions,
+            'floor_svg':floor_svg,
             'room_image_url':room_image_url,
+            'booth_name':booth_name,
             })
     
             

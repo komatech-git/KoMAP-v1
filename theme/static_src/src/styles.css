@@ -15,7 +15,7 @@
   }
 }
 
-/* ======= コンポ�EネンチE======= */
+/* ======= コンポ�EネンチE======= */
 @layer components {
   /* 検索フォームカーチE*/
   .search-card {
@@ -29,7 +29,7 @@
   .map-card {
     @apply bg-white shadow rounded overflow-hidden max-w-3xl mx-auto;
   }
-  /* ブ�Eス惁E��のカード風レイアウチE*/
+  /* ブ�Eス惁E��のカード風レイアウチE*/
   .booth-area {
     @apply bg-blue-50 px-4 py-8;
   }
@@ -65,7 +65,7 @@
   }
 }
 
-/* ======= Header コンポ�EネンチE======= */
+/* ======= Header コンポ�EネンチE======= */
 @layer components {
     /* ヘッダー全佁E*/
     .header {
@@ -83,18 +83,18 @@
     .header-nav-mobile-btn {
       @apply md:hidden focus:outline-none;
     }
-    /* モバイル用メニュー�E��E期�E非表示�E�E*/
+    /* モバイル用メニュー�E��E期�E非表示�E�E*/
     .mobile-menu {
       @apply  bg-gray-800 text-white;
     }
-    /* モバイル用メニュー冁E��スチE*/
+    /* モバイル用メニュー冁E��スチE*/
     .mobile-menu-list {
       @apply p-4 space-y-2;
     }
   }
 
   @layer components {
-    /* フッター全体�Eスタイル */
+    /* フッター全体�Eスタイル */
     .footer {
       @apply bg-gray-200;
     }
@@ -110,4 +110,14 @@
 /* リンクのスタイル */
 a {
   @apply text-blue-500 hover:underline;
+}
+
+@layer components {
+  .highlight {
+    /* TailwindCSSのred-500 (#ef4444)とyellow-200 (#fef08a)を使用 */
+    stroke: #ef4444;
+    stroke-width: 3;
+    fill: #fef08a;
+    transition: all 0.3s ease;
+  }
 }
