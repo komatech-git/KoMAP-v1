@@ -33,6 +33,9 @@ CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True   # httpアクセスをhttpsにリダイレクト
 
 ALLOWED_HOSTS = ['komap.fly.dev']
+
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/admin/'
 # settings.py
 CSRF_TRUSTED_ORIGINS = ['https://komap.fly.dev']
 
