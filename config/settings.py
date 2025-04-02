@@ -38,8 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "festival_p1",
-    "map",
+    'festival_p1',
+    'map',
+    'tailwind',
+    'theme',
+    #'django_browser_reload'
+]
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 MIDDLEWARE = [
@@ -125,6 +134,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = f'/var/www/{BASE_DIR.name}/static'
+
+MEDIA_URL = '/media/'
+#TODO:本番環墁E��はこうする、EEDIA_ROOT = f'/vat/www/{BASE_DIR.name}/media'
+MEDIA_ROOT = BASE_DIR/ 'media_root'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

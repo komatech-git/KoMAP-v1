@@ -1,10 +1,16 @@
 # forms.py
 from django import forms
+from .models import Floor
 
 class NavigationForm(forms.Form):
-    # ユーザーが現在いる階を入力
-    floor = forms.IntegerField(label="現在の階")
-    # ユーザーが目的とするブース名を入力
+    # ユーザーが現在ぁE��階を入劁E
+    floor = forms.ChoiceField(
+        label="現在の階",
+        choices=[], 
+        )
+    # ユーザーが目皁E��するブ�Eス名を入劁E
     booth = forms.CharField(label="目的のブース", max_length=100)
 
-    #TODO: formに改良が必要。modelからboothが検索欄に表示されるようにするべき
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['floor'].choices= [(f.id, f.number) for f in Floor.objects.order_by('number')]

@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ======= 共通設宁E======= */
+@layer base {
+  body {
+    @apply bg-gray-100 text-gray-900 font-sans;
+  }
+  h2 {
+    @apply text-2xl font-bold text-center my-4;
+  }
+  h3 {
+    @apply mt-[10px] text-base text-center font-bold;
+  }
+}
+
+/* ======= コンポ�EネンチE======= */
+@layer components {
+  /* 検索フォームカーチE*/
+  .search-card {
+    @apply bg-white shadow rounded p-6 mb-8 max-w-3xl mx-auto;
+  }
+  /* 結果表示カーチE*/
+  .result-card {
+    @apply bg-white shadow rounded p-6 mb-8 max-w-3xl mx-auto;
+  }
+  /* マップ画像カーチE*/
+  .map-card {
+    @apply bg-white shadow rounded overflow-hidden max-w-3xl mx-auto;
+  }
+  /* ブ�Eス惁E��のカード風レイアウチE*/
+  .booth-area {
+    @apply bg-blue-50 px-4 py-8;
+  }
+  .booth-info {
+    @apply bg-white p-4 mb-4 rounded shadow max-w-xl mx-auto ;
+  }
+  
+  .booth-info p {
+    @apply text-gray-700 mb-2;
+  }
+  .booth-info a {
+    @apply text-blue-500 hover:underline;
+  }
+    /* フォームのスタイル */
+  form {
+    @apply bg-white p-4 rounded shadow max-w-lg mx-auto;
+  }
+  /* 入力要素の共通スタイル */
+  input,
+  select {
+    @apply border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  /* ボタン */
+  .btn {
+    @apply bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded;
+  }
+  /* jQuery UI Autocomplete のスタイル上書ぁE*/
+  .ui-autocomplete {
+    @apply bg-white border border-gray-300 rounded shadow-lg z-50;
+  }
+  .ui-menu-item-wrapper.ui-state-active {
+    @apply bg-blue-500 text-white;
+  }
+}
+
+/* ======= Header コンポ�EネンチE======= */
+@layer components {
+    /* ヘッダー全佁E*/
+    .header {
+      @apply flex items-center justify-between p-4 bg-gray-800 text-white;
+    }
+    /* 左側のブランド表示 */
+    .header-brand {
+      @apply text-3xl font-bold;
+    }
+    /* PC用のナビゲーション */
+    .header-nav {
+      @apply hidden md:flex space-x-6;
+    }
+    /* モバイル用ナビゲーションボタン */
+    .header-nav-mobile-btn {
+      @apply md:hidden focus:outline-none;
+    }
+    /* モバイル用メニュー�E��E期�E非表示�E�E*/
+    .mobile-menu {
+      @apply  bg-gray-800 text-white;
+    }
+    /* モバイル用メニュー冁E��スチE*/
+    .mobile-menu-list {
+      @apply p-4 space-y-2;
+    }
+  }
+
+  @layer components {
+    /* フッター全体�Eスタイル */
+    .footer {
+      @apply bg-gray-200;
+    }
+  }
+
+/* ======= カスタムスタイル ======= */
+.hover-glow {
+  box-shadow: 0 0 10px 2px rgba(59, 130, 246, 0.8);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* リンクのスタイル */
+a {
+  @apply text-blue-500 hover:underline;
+}
+
+@layer components {
+  .highlight {
+    /* TailwindCSSのred-500 (#ef4444)とyellow-200 (#fef08a)を使用 */
+    stroke: #ef4444;
+    stroke-width: 3;
+    fill: #fef08a;
+    transition: all 0.3s ease;
+  }
+}

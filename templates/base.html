@@ -1,23 +1,19 @@
 {% load static%}
-<!docotype html>
+<!DOCTYPE html>
 <html lang = ja>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, inital-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {# --タイトル-- #}
     <title> {% block title %} {% endblock %} </title>
-    <link rel="stylesheet" href = "{% static 'css/styles' %}">
-    <style>
-        body{
-            background-color: #f5f5f5
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
     {# --css-- #}
     {% block extra_css %}{% endblock %}
     </head>
 
     <body>
-        {# --メインコンテンツ-- #}
+        {% include "_header.html"%}
+        {# --メインコンテンツ -- #}
         {% block main %}{% endblock %}
 
         {# --フッター-- #}
@@ -31,4 +27,3 @@
         {% block extra_js %} {% endblock %}
     </body>
 </html>
-

@@ -1,0 +1,112 @@
+<!-- templates/map/result.html -->
+{% extends "base.html" %}
+
+{% block title %}Map Results{% endblock %}
+{# --css-- #}
+{% block extra_css %}
+<style>
+  #map_svg svg {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container mx-auto px-4 py-6">
+  <h2 class="text-3xl font-semibold mb-6 text-center">Search Results</h2>
+  
+  <!-- 検索フォームカード -->
+  <div class="search-card">
+    <form method="post" class="flex flex-col space-y-4">
+      {% csrf_token %}
+      {{ form.as_table }}
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+  {% if instructions.intro %}
+  <div id="info_card_intro" class="result-card">
+      {% for msg in instructions.intro %}
+        <p>{{ msg }}</p>
+      {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if instructions.floor_move %}
+  <div id="info_card_floormove" class="result-card">
+
+      {% for msg in instructions.floor_move %}
+        <p>{{ msg }}</p>
+      {% endfor %}    
+      {% if long_elevator_url %}
+        <div id="long_elevator" class="result-card">
+          <img src="{{ long_elevator_url }}" alt="Long Elevator" class="w-full object-cover">
+        </div>
+      {% endif %}
+      
+      {% if short_elevator_url %}
+        <div id="short_elevator" class="result-card">
+          <img src="{{ short_elevator_url }}" alt="Short Elevator" class="w-full object-cover">
+        </div>
+      {% endif %}
+      
+
+  </div>
+  {% endif %}
+
+  {% if instructions.room_guide %}
+  <div id="info_card_roomguide" class="result-card">
+
+      {% for msg in instructions.room_guide %}
+        <p>{{ msg }}</p>
+      {% endfor %}
+      
+      {% if room_image_url %}
+      <div id="map_picture" class="result-card">
+        <img src="{{ room_image_url }}" alt="Map Overview" class="w-full object-cover">
+        {% if floor_svg %}
+        <P>floor_svgはtemplateに送られてるze</P>
+          {{ floor_svg|safe }}
+        {% endif %}  
+      </div>
+      {% endif %}
+  </div>
+  {% endif %}
+  {% if floor_svg %}
+    <div id="map_svg_card" class="result-card">
+      <div id="map_svg" class="w-full max-w-lg mx-auto">
+      {{ floor_svg|safe }}
+      </div>
+    </div>
+  {% endif %}
+  {% endblock %}  
+
+  {% block extra_js %}
+  <!-- jQuery と jQuery UI の読み込み -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  
+
+  <script>
+    $(function() {
+      // boothフィールドのオートコンプリート
+      $('#id_booth').autocomplete({
+        source: "{% url 'map:booth-autocomplete' %}",
+        minLength: 1,
+      });
+      
+      // viewから渡されたbooth_nameをJavaScript変数に渡す
+      var boothName = "{{ booth_name|escapejs }}";
+      if (boothName) {
+        // floor_svgが含まれる#map_picture内のsvg要素から、該当の要素を探す
+        var boothElement = $('#map_picture svg').find('#' + boothName);
+        if (boothElement.length) {
+          boothElement.addClass('highlight');
+        }
+      }
+    });
+  </script>
+  {% endblock %}

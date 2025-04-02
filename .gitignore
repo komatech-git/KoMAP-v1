@@ -1,10 +1,46 @@
-#セキュリティのため、.envは無視
+# セキュリティのため、.envは無視
 .env
 
-#コンテナ内部で作られるキャッシュなどは無視
+# コンテナ内部で作られるキャッシュなどは無視
 **/__pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.log
 
+# Django関連
+
+media/
+staticfiles/
+
+# Docker関連
+
+*.pid
+*.seed
+docker-compose.override.yml
+.env.docker
+
+# Node.js / TailwindCSS関連
+
+node_modules/
+package-lock.json
+yarn.lock
+dist/
+build/
+.npm/
+.npmrc
+
+# Tailwindのキャッシュ
+.tailwind-config.js
+.tailwindcss-debug.log
+.postcssrc.js
+
+
+# OS関連
+
+.DS_Store
+Thumbs.db
+
+# Excel temporary files
+~$*.xlsx
+~$*.xls
