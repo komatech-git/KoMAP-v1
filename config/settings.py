@@ -36,9 +36,6 @@ ALLOWED_HOSTS = ['komap.fly.dev']
 # settings.py
 CSRF_TRUSTED_ORIGINS = ['https://komap.fly.dev']
 
-SESSION_ENGINE='django.contrib.sessions.backends.file'
-SESSION_FILE_PATH= BASE_DIR/ 'sessions'
-
 # Application definition
 
 INSTALLED_APPS = [
