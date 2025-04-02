@@ -26,10 +26,18 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+SESSION_COOKIE_SECURE = False # Fly.ioではhttpsが使える前提で
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True    # httpアクセスをhttpsにリダイレクト
 
 ALLOWED_HOSTS = ['komap.fly.dev']
 # settings.py
 CSRF_TRUSTED_ORIGINS = ['https://komap.fly.dev']
+
+LOGIN_URL = '/sakurasakukomatech-secret-admin/login/'
+LOGIN_REDIRECT_URL = '/sakurasakukomatech-secret-admin/'
 
 
 
