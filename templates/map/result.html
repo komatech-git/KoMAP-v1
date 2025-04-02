@@ -96,17 +96,28 @@
         source: "{% url 'map:booth-autocomplete' %}",
         minLength: 1,
       });
-      
+  
       // viewから渡されたbooth_nameをJavaScript変数に渡す
       var boothName = "{{ booth_room|escapejs }}";
+  
+      // 日本語のブース名と対応する英語IDのマッピング辞書
+      var boothMapping = {
+        "ブース名日本語1": "booth1",
+        "ブース名日本語2": "booth2"
+        // 必要に応じて他のマッピングを追加してください
+      };
+  
       if (boothName) {
-        // floor_svgが含まれる#map_picture内のsvg要素から、該当の要素を探す
-        var boothElement = $('#map_svg svg').find('[id="' + boothName + '"]');
-            if (boothElement.length) {
-            boothElement.addClass('highlight');
-            }
+        // 対応する英語のIDを取得
+        var englishId = boothMapping[boothName] || boothName;  // マッピングがなければそのまま使用
+  
+        // #map_svg内のsvg要素から、対応するIDを持つ要素を探す
+        var boothElement = $('#map_svg svg').find('[id="' + englishId + '"]');
+  
+        if (boothElement.length) {
+          boothElement.addClass('highlight');
+        }
       }
-     
     });
   </script>
   {% endblock %}
