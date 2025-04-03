@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
         # CSVの全行をリストに保存（circle作成後、booth作成でも利用）
         rows = []
-        with open(csv_file, 'r', encoding='utf-8') as f:
+        with open(csv_file, 'r', encoding='utf-8-sig' ) as f:
             reader = csv.DictReader(f)
             for row in reader:
                 rows.append(row)
@@ -31,15 +31,17 @@ class Command(BaseCommand):
 
         # CSVファイルの各行について、room.nameカラムを利用してBoothを作成
         for row in rows:
+            floor_number = row.get('floor.number')
             circle_name = row.get('circle.name')
             room_name = row.get('room.name')
-            if not circle_name or not room_name:
-                self.stdout.write('circle.nameまたはroom.nameの情報が不足している行をスキップします。')
+
+            if not circle_name or not room_name or not floor_number:
+                self.stdout.write('circle.nameまたはroom.name, floor_numberの情報が不足している行をスキップします。')
                 continue
 
             # 既存のCircleとRoomを取得
             circle = Circle.objects.filter(name=circle_name).first()
-            room = Room.objects.filter(name=room_name).first()
+            room = Room.objects.filter(name=room_name, floor__number=floor_number).first()
 
             if circle and room:
                 booth, created = Booth.objects.get_or_create(circle=circle, room=room)
@@ -51,6 +53,6 @@ class Command(BaseCommand):
                 if not circle:
                     self.stdout.write(f'Circleが見つかりませんでした: {circle_name}')
                 if not room:
-                    self.stdout.write(f'Roomが見つかりませんでした: {room_name}')
+                    self.stdout.write(f'Roomが見つかりませんでした: {room_name},{floor_number}')
 
         self.stdout.write(self.style.SUCCESS('全てのbooth作成が完了しました。'))
