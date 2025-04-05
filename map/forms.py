@@ -9,7 +9,13 @@ class NavigationForm(forms.Form):
         choices=[], 
         )
     # ユーザーが目皁E��するブ�Eス名を入劁E
-    booth = forms.CharField(label="目的のブース", max_length=100)
+    booth = forms.CharField(
+        label="目的のブース", 
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': '目的のサークルを正式名称で入力してください'
+        })
+    )
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
