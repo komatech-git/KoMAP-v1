@@ -7,12 +7,12 @@
 {% if booth_info %}
   <div class="booth-area">
     <div class="max-w-xl mx-auto">
-      <h3>サークルのブースを見てみよう</h3>
+      <h3>サークルをランダムに3つ紹介しています</h3>
     </div>
     {% for booth in booth_info %}
       <div class="booth-info">
         <p>サークル:{{ booth.circle_name }}</p>
-        <p>ブースのある場所: {{ booth.room_name }}</p>
+        <p>ブースのある場所:{{booth.booth_floor}}階, {{ booth.room_name }}</p>
         <a href="{{ booth.url }}" class="hidden">url</a>
       </div>
     {% endfor %}
@@ -21,6 +21,7 @@
   <!-- 検索フォームカーチE-->
   <div class="search-card">
     <h3>現在の階と目的地を入力してください</h3>
+    <h3>目的のサークルまでご案内します</h3>
     <form method="post" class="flex flex-col space-y-4">
       {% csrf_token %}
       {{ form.as_table }}

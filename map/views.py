@@ -20,12 +20,14 @@ class IndexView(View):
         for booth in booths:
             circle_name = booth.circle.name if booth.circle else "未設定"
             room_name = booth.room.name if booth.room else "未設定"
+            booth_floor = booth.room.floor.number if booth.room else "未設定"
             # 結果ペ�EジのURLにbooth_idをクエリパラメータとして付丁E
             url = reverse('map:result') + f'?booth_id={booth.id}'
             booth_info.append({
                 "circle_name": circle_name,
                 "room_name": room_name,
-                "url": url,
+                "booth_floor": booth_floor,
+                "url":url,
             })
 
         context = {
@@ -88,7 +90,8 @@ class ResultView(View):
             'intro':[],
             'floor_move':[],
             'room_guide':[],
-        } 
+            'room_floor':[],
+            } 
         destination_floor = booth.room.floor.number
         booth_name = booth.circle.name
         booth_room = booth.room.name
@@ -117,10 +120,10 @@ class ResultView(View):
             else: 
                 instructions['floor_move'].append(f"{destination_floor}階まで移動してください")
             
-            if destination_floor > current_floor:
-                instructions['floor_move'].append(f"あなたは{floor_diff}階上がる必要があります")
-            elif destination_floor < current_floor:
-                instructions['floor_move'].append(f"あなたは{floor_diff}階下がる必要があります")
+            # if destination_floor > current_floor:
+            #     instructions['floor_move'].append(f"あなたは{floor_diff}階上がる必要があります")
+            # elif destination_floor < current_floor:
+            #     instructions['floor_move'].append(f"あなたは{floor_diff}階下がる必要があります")
 
         
         instructions['room_guide'].append(f"目的のブースは{booth_room}にあります")
