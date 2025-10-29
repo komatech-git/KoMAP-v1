@@ -69,4 +69,4 @@ KoMAPは、イベント参加者には「迷わず目的の場所を見つけら
 
 ## 作者
 
-* [Your Name] - [https://github.com/Yuto-komatech]
+* [Yuto-komatech] - [https://github.com/Yuto-komatech]
