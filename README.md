@@ -43,8 +43,6 @@ KoMAPは、イベント参加者には「迷わず目的の場所を見つけら
 
 ### スクリーンショット
 
-*(index.htmlやresult.htmlのスクリーンショットを挿入)*
-例:
 [komap_demo.pdf](https://github.com/user-attachments/files/23209012/9.pdf)
 
 
